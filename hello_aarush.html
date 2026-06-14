@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Hello Aarush | Greeting Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .greeting-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border-radius: 3rem;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      text-align: center;
+      max-width: 700px;
+      width: 100%;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .greeting-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 30px 55px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2);
+    }
+    .hello-message {
+      font-size: clamp(3rem, 12vw, 6rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(120deg, #f9f3c1, #ffe6b0, #ffd966);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-bottom: 0.75rem;
+      animation: softGlow 2s infinite alternate;
+    }
+    @keyframes softGlow {
+      0% { text-shadow: 0 0 0px rgba(255, 215, 100, 0.3); }
+      100% { text-shadow: 0 0 12px rgba(255, 215, 100, 0.6); }
+    }
+    .sub-line {
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: #cbd5e6;
+      background: rgba(0, 0, 0, 0.2);
+      display: inline-block;
+      padding: 0.3rem 1.2rem;
+      border-radius: 60px;
+      margin-bottom: 1.5rem;
+    }
+    .emoji-row {
+      font-size: 2.2rem;
+      margin: 1rem 0 1.2rem 0;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .description {
+      color: #e2e8f0;
+      font-size: 1rem;
+      line-height: 1.5;
+      max-width: 450px;
+      margin: 0 auto 1.8rem auto;
+    }
+    .celebration-btn {
+      background: linear-gradient(95deg, #ffb347, #ff8c1a);
+      border: none;
+      padding: 0.7rem 1.8rem;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1e1e2f;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .celebration-btn:hover {
+      transform: scale(1.02);
+      background: linear-gradient(95deg, #ffa535, #ff7a00);
+    }
+    .footer-note {
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      color: #8a99b0;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 1.2rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="greeting-card">
+  <h1 class="hello-message">Hello Aarush</h1>
+  <div class="sub-line">✨ Welcome to your personal space ✨</div>
+  <div class="emoji-row">
+    <span>🌟</span> <span>💻</span> <span>🚀</span> <span>🎉</span> <span>🌈</span>
+  </div>
+  <p class="description">
+    This website was built just for you, Aarush! <br>
+    Whether you're on Mac, Windows, or any device — a warm greeting awaits.
+  </p>
+  <button class="celebration-btn" id="cheerBtn">✨ Say cheers ✨</button>
+  <div class="footer-note">
+    <span id="currentTime"></span>
+    <span>•</span>
+    <span>Made with 💛 for Aarush</span>
+    <span>•</span>
+    <span>🌍 Works on any browser</span>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const timeElement = document.getElementById('currentTime');
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      const formattedDate = now.toLocaleDateString(undefined, options);
+      if (timeElement) {
+        timeElement.textContent = `${formattedDate} · ${hours}:${minutes}:${seconds}`;
+      }
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+    
+    const button = document.getElementById('cheerBtn');
+    if (button) {
+      button.addEventListener('click', function() {
+        alert("🎉 Hello Aarush! Wishing you an amazing day filled with code, creativity, and smiles! 🚀");
+        const originalText = button.textContent;
+        button.textContent = "🎈 Cheers sent! 🎈";
+        setTimeout(() => {
+          button.textContent = originalText;
+        }, 1200);
+      });
+    }
+  });
+</script>
+</body>
+</html>
