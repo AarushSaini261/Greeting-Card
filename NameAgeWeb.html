@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Personalized Greeting | Name & Age</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .greeting-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border-radius: 3rem;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      text-align: center;
+      max-width: 700px;
+      width: 100%;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .greeting-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 30px 55px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2);
+    }
+    .hello-message {
+      font-size: clamp(2.8rem, 12vw, 5.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(120deg, #f9f3c1, #ffe6b0, #ffd966);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-bottom: 0.5rem;
+      animation: softGlow 2s infinite alternate;
+      word-break: break-word;
+    }
+    @keyframes softGlow {
+      0% { text-shadow: 0 0 0px rgba(255, 215, 100, 0.3); }
+      100% { text-shadow: 0 0 12px rgba(255, 215, 100, 0.6); }
+    }
+    .sub-line {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #cbd5e6;
+      background: rgba(0, 0, 0, 0.2);
+      display: inline-block;
+      padding: 0.3rem 1.2rem;
+      border-radius: 60px;
+      margin-bottom: 1rem;
+    }
+    .emoji-row {
+      font-size: 2rem;
+      margin: 0.8rem 0 1rem 0;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .description {
+      color: #e2e8f0;
+      font-size: 1rem;
+      line-height: 1.5;
+      max-width: 450px;
+      margin: 0 auto 1.2rem auto;
+    }
+    /* new form styling */
+    .user-form {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 2rem;
+      padding: 1.2rem 1rem;
+      margin: 1rem 0 1rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.8rem;
+      align-items: flex-end;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      gap: 0.3rem;
+      min-width: 140px;
+    }
+    .input-group label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      color: #a5b4d0;
+    }
+    .input-group input {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.6rem 0.9rem;
+      border-radius: 2rem;
+      font-size: 0.9rem;
+      color: #f1f5f9;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s;
+      width: 100%;
+    }
+    .input-group input:focus {
+      border-color: #ffb347;
+      box-shadow: 0 0 0 2px rgba(255, 180, 71, 0.4);
+    }
+    .input-group input::placeholder {
+      color: #7f8ea3;
+      font-size: 0.8rem;
+    }
+    .submit-btn {
+      background: linear-gradient(95deg, #ffb347, #ff8c1a);
+      border: none;
+      padding: 0.6rem 1.4rem;
+      border-radius: 2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1e1e2f;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.1s ease;
+      margin-top: 0.2rem;
+    }
+    .submit-btn:hover {
+      transform: scale(1.02);
+      background: linear-gradient(95deg, #ffa535, #ff7a00);
+    }
+    .celebration-btn {
+      background: linear-gradient(95deg, #ffb347, #ff8c1a);
+      border: none;
+      padding: 0.7rem 1.8rem;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1e1e2f;
+      cursor: pointer;
+      font-family: inherit;
+      margin-top: 0.5rem;
+      transition: 0.1s;
+    }
+    .celebration-btn:hover {
+      transform: scale(1.02);
+      background: linear-gradient(95deg, #ffa535, #ff7a00);
+    }
+    .reset-area {
+      margin-top: 0.8rem;
+    }
+    .reset-link {
+      background: none;
+      border: none;
+      color: #b9c7dd;
+      font-size: 0.7rem;
+      text-decoration: underline;
+      cursor: pointer;
+      font-family: inherit;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .reset-link:hover {
+      opacity: 1;
+      color: #ffd966;
+    }
+    .personal-status {
+      font-size: 0.85rem;
+      color: #ffdf9c;
+      background: rgba(0, 0, 0, 0.3);
+      display: inline-block;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      margin: 0.5rem auto 0;
+    }
+    .footer-note {
+      margin-top: 1.8rem;
+      font-size: 0.75rem;
+      color: #8a99b0;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+<div class="greeting-card">
+  <!-- dynamic main greeting line: updated when user submits name/age -->
+  <h1 class="hello-message" id="greetingNameDisplay">✨ Hello, Explorer ✨</h1>
+  <div class="sub-line" id="subGreeting">🌸 Your story begins here 🌸</div>
+  
+  <!-- optional personalized age / status line -->
+  <div id="ageStatus" class="personal-status"></div>
+  
+  <div class="emoji-row">
+    <span>🌟</span> <span>💻</span> <span>🚀</span> <span>🎉</span> <span>🌈</span>
+  </div>
+  
+  <p class="description">
+    Welcome to your interactive space.<br>
+    Enter your name and age below — I'll make this page truly yours!
+  </p>
+  
+  <!-- interactive form: name + age -->
+  <div class="user-form">
+    <div class="input-group">
+      <label>✨ YOUR NAME</label>
+      <input type="text" id="userNameInput" placeholder="e.g., Aarush, Sophia, Liam" autocomplete="off">
+    </div>
+    <div class="input-group">
+      <label>🎂 YOUR AGE</label>
+      <input type="number" id="userAgeInput" placeholder="e.g., 12 or 25" min="1" max="120" autocomplete="off">
+    </div>
+    <button class="submit-btn" id="saveDetailsBtn">✨ Set Profile ✨</button>
+  </div>
+  
+  <!-- cheers button will show personalized message with name & age -->
+  <button class="celebration-btn" id="cheerBtn">🎉 Say Cheers 🎉</button>
+  
+  <!-- optional reset to default state -->
+  <div class="reset-area">
+    <button class="reset-link" id="resetBtn">⟳ reset to default greeting</button>
+  </div>
+  
+  <div class="footer-note">
+    <span id="currentTime"></span>
+    <span>•</span>
+    <span>Made with 💛 for everyone</span>
+    <span>•</span>
+    <span>🌍 Your name + age = magic</span>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---- DOM elements ----
+    const greetingNameDisplay = document.getElementById('greetingNameDisplay');   // main H1
+    const subGreetingSpan = document.getElementById('subGreeting');             // small tagline below
+    const ageStatusSpan = document.getElementById('ageStatus');                 // shows age info
+    const userNameInput = document.getElementById('userNameInput');
+    const userAgeInput = document.getElementById('userAgeInput');
+    const saveBtn = document.getElementById('saveDetailsBtn');
+    const cheerBtn = document.getElementById('cheerBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const timeElement = document.getElementById('currentTime');
+
+    // Helper: update live clock
+    function updateClock() {
+      if (!timeElement) return;
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      const formattedDate = now.toLocaleDateString(undefined, options);
+      timeElement.textContent = `${formattedDate} · ${hours}:${minutes}:${seconds}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+    
+    // ---------- State management ----------
+    // We'll store the current user's display name and age (strings/numbers)
+    // Initially no custom data -> show default 'Hello, Explorer'
+    let currentUserName = null;     // null means default
+    let currentUserAge = null;
+    
+    // Helper: update whole UI based on currentUserName & currentUserAge
+    function refreshDisplay() {
+      // update main greeting (hello message)
+      if (currentUserName && currentUserName.trim() !== "") {
+        const cleanName = currentUserName.trim();
+        greetingNameDisplay.textContent = `✨ Hello, ${cleanName} ✨`;
+      } else {
+        greetingNameDisplay.textContent = `✨ Hello, Explorer ✨`;
+      }
+      
+      // update the subtitle line with personalized touch or default
+      if (currentUserName && currentUserName.trim() !== "") {
+        const namePart = currentUserName.trim();
+        subGreetingSpan.textContent = `🌟 Welcome ${namePart} — you belong here 🌟`;
+      } else {
+        subGreetingSpan.textContent = `🌸 Enter your name & age above 🌸`;
+      }
+      
+      // update age status area: show age-related message or encourage to set
+      if (currentUserAge !== null && !isNaN(parseInt(currentUserAge))) {
+        const ageNum = parseInt(currentUserAge);
+        let ageDescriptor = "";
+        if (ageNum < 13) ageDescriptor = "🎈 young star · so much ahead! 🎈";
+        else if (ageNum >= 13 && ageNum <= 19) ageDescriptor = "🚀 teenage spirit — awesome energy! 🚀";
+        else if (ageNum >= 20 && ageNum <= 35) ageDescriptor = "💪 prime years · making moves! 💪";
+        else if (ageNum > 35 && ageNum <= 60) ageDescriptor = "🌿 wise & wonderful! 🌿";
+        else if (ageNum > 60) ageDescriptor = "🏆 legendary experience! 🏆";
+        else ageDescriptor = "✨ amazing age, keep shining ✨";
+        
+        if (currentUserName && currentUserName.trim() !== "") {
+          ageStatusSpan.textContent = `🎂 Age: ${ageNum} · ${ageDescriptor}`;
+        } else {
+          ageStatusSpan.textContent = `🎂 Age: ${ageNum} · ${ageDescriptor}`;
+        }
+      } else {
+        if (currentUserName && currentUserName.trim() !== "") {
+          ageStatusSpan.textContent = `✨ Add your age to personalize even more! ✨`;
+        } else {
+          ageStatusSpan.textContent = `✨ Enter age for special messages ✨`;
+        }
+      }
+      
+      // Additional small effect: if both name and age are filled, make emoji row slightly happier? (optional but fun)
+      if (currentUserName && currentUserName.trim() !== "" && currentUserAge !== null && !isNaN(parseInt(currentUserAge))) {
+        // subtle micro interaction: just for delight, not intrusive
+        const emojiRow = document.querySelector('.emoji-row');
+        if (emojiRow && !emojiRow.hasAttribute('data-celebrated')) {
+          // we don't spam, just one style hint but no big deal — just keep as is
+        }
+      }
+    }
+    
+    // Function to set user details from form input (called when pressing Set Profile)
+    function setUserProfile() {
+      let rawName = userNameInput.value;
+      let rawAge = userAgeInput.value;
+      
+      // Name validation: if empty or only spaces, treat as not provided but we still let name be null/empty?
+      let finalName = null;
+      if (rawName !== undefined && rawName.trim() !== "") {
+        finalName = rawName.trim();
+      } else {
+        finalName = null;   // no custom name
+      }
+      
+      let finalAge = null;
+      if (rawAge !== undefined && rawAge !== "") {
+        const ageNum = parseInt(rawAge);
+        if (!isNaN(ageNum) && ageNum >= 1 && ageNum <= 120) {
+          finalAge = ageNum;
+        } else {
+          // invalid age entered: show a temporary feedback but not update age
+          alert("❗ Please enter a valid age between 1 and 120. Age not updated.");
+          finalAge = currentUserAge;  // keep previous age if exists, else null
+        }
+      } else {
+        finalAge = null;  // if empty field, remove age info
+      }
+      
+      // handle case: if name is provided properly, we set currentUserName, else set to null
+      if (finalName !== null) {
+        currentUserName = finalName;
+      } else {
+        // if user cleared name field -> they want to reset name part only
+        currentUserName = null;
+      }
+      
+      // only update age if age input was valid AND not empty. If empty -> currentUserAge = null
+      if (rawAge !== undefined && rawAge !== "") {
+        const ageCheck = parseInt(rawAge);
+        if (!isNaN(ageCheck) && ageCheck >= 1 && ageCheck <= 120) {
+          currentUserAge = ageCheck;
+        } else if (rawAge !== "") {
+          // invalid age number but we already alerted above, keep existing age (but we must not erase?)
+          // we already handled finalAge logic; but we need consistency: 
+          // actually we used finalAge logic: finalAge set only if valid. So assign carefully
+          if (finalAge !== null) currentUserAge = finalAge;
+          else {
+            // if invalid input, keep previous age unchanged (do nothing)
+          }
+        }
+      } else {
+        // explicitly cleared age field -> set age to null
+        currentUserAge = null;
+      }
+      
+      // edge case: if finalName was set but finalAge not, reflect fresh
+      if (finalName === null) currentUserName = null;
+      if (rawAge === "") currentUserAge = null;
+      
+      // after updating state, refresh UI
+      refreshDisplay();
+      
+      // optional: show a pleasant small success message (but not intrusive)
+      if (currentUserName && currentUserAge !== null) {
+        // mild success
+        const tempMsg = document.createElement('div');
+        tempMsg.textContent = "✓ Profile updated!";
+        tempMsg.style.position = "absolute";
+        tempMsg.style.fontSize = "0.7rem";
+        tempMsg.style.background = "#2d3e5f";
+        tempMsg.style.color = "#ffecb3";
+        tempMsg.style.padding = "0.2rem 0.8rem";
+        tempMsg.style.borderRadius = "30px";
+        tempMsg.style.marginTop = "0.3rem";
+        tempMsg.style.opacity = "0.9";
+        const formDiv = document.querySelector('.user-form');
+        if (formDiv) {
+          formDiv.appendChild(tempMsg);
+          setTimeout(() => { if(tempMsg.parentNode) tempMsg.remove(); }, 1500);
+        }
+      } else if (currentUserName && currentUserAge === null) {
+        // only name
+        const msg = document.createElement('div');
+        msg.textContent = "✨ Name saved! Add age for extra fun ✨";
+        msg.style.cssText = "position:absolute; font-size:0.7rem; background:#2d3e5f; color:#ffecb3; padding:0.2rem 0.8rem; border-radius:30px; margin-top:0.3rem;";
+        const formDiv = document.querySelector('.user-form');
+        if (formDiv) {
+          formDiv.appendChild(msg);
+          setTimeout(() => { if(msg.parentNode) msg.remove(); }, 1500);
+        }
+      } else if (!currentUserName && currentUserAge !== null) {
+        // age without name
+        const msg = document.createElement('div');
+        msg.textContent = "🎂 Age set! Don't forget to add a name 🎂";
+        msg.style.cssText = "position:absolute; font-size:0.7rem; background:#2d3e5f; color:#ffecb3; padding:0.2rem 0.8rem; border-radius:30px; margin-top:0.3rem;";
+        const formDiv = document.querySelector('.user-form');
+        if (formDiv) {
+          formDiv.appendChild(msg);
+          setTimeout(() => { if(msg.parentNode) msg.remove(); }, 1500);
+        }
+      }
+      
+      // Clear input fields after setting? Not necessarily, but we keep values for convenience but also reflect that they are now active.
+      // But we do not clear inputs: user can see what they entered, but also if they want to modify later, it's fine.
+      // However we can set placeholder or keep as is. For better UX, we leave current fields as they are.
+      // Also handle border highlight if needed.
+    }
+    
+    // ----- Reset Functionality: Revert to initial state like "Hello Aarush" style but generic "Explorer" + clear age status
+    function resetToDefault() {
+      currentUserName = null;
+      currentUserAge = null;
+      // Clear input fields values visually
+      userNameInput.value = "";
+      userAgeInput.value = "";
+      // refresh display back to default friendly greeting
+      refreshDisplay();
+      // Optionally show a quick reset feedback
+      const feedbackSpan = document.createElement('span');
+      feedbackSpan.textContent = "↻ Reset to default greeting";
+      feedbackSpan.style.fontSize = "0.65rem";
+      feedbackSpan.style.color = "#ffde9e";
+      feedbackSpan.style.background = "rgba(0,0,0,0.4)";
+      feedbackSpan.style.padding = "0.2rem 0.8rem";
+      feedbackSpan.style.borderRadius = "20px";
+      const resetContainer = document.querySelector('.reset-area');
+      if (resetContainer) {
+        resetContainer.appendChild(feedbackSpan);
+        setTimeout(() => feedbackSpan.remove(), 1200);
+      }
+    }
+    
+    // ----- Personalized Cheers Message based on currentUserName & currentUserAge
+    function showPersonalizedCheers() {
+      let nameForMessage = "there";
+      let ageForMessage = null;
+      
+      if (currentUserName && currentUserName.trim() !== "") {
+        nameForMessage = currentUserName.trim();
+      } else {
+        nameForMessage = "awesome friend";
+      }
+      
+      if (currentUserAge !== null && !isNaN(parseInt(currentUserAge))) {
+        ageForMessage = parseInt(currentUserAge);
+      }
+      
+      let cheerText = "";
+      if (ageForMessage !== null) {
+        // age-specific cheers + name
+        if (ageForMessage < 13) {
+          cheerText = `🎈 Yay ${nameForMessage}! You're ${ageForMessage} years young — keep dreaming big, coding fun, and spreading joy! 🚀🌈`;
+        } else if (ageForMessage >= 13 && ageForMessage <= 19) {
+          cheerText = `🔥 ${nameForMessage}, age ${ageForMessage} is incredible! Explore, create, and shine bright. Wishing you epic adventures! ✨🎉`;
+        } else if (ageForMessage >= 20 && ageForMessage <= 35) {
+          cheerText = `💼✨ Hey ${nameForMessage} (${ageForMessage}) — you're crushing it! Keep building, smiling, and chasing brilliance. Cheers to you! 🥂🚀`;
+        } else if (ageForMessage > 35 && ageForMessage <= 60) {
+          cheerText = `🌿🌟 Amazing ${nameForMessage}, ${ageForMessage} — wisdom meets wonder! Wishing you success, health, and countless joyful moments. 💛`;
+        } else if (ageForMessage > 60) {
+          cheerText = `🏆💫 Respect, ${nameForMessage}! Age ${ageForMessage} is legendary. Thanks for your presence and inspiration. Have a splendid day! 🌈🎉`;
+        } else {
+          cheerText = `🎉 Hello ${nameForMessage}! Age ${ageForMessage} is powerful — keep moving forward with creativity! Wishing you magic today. ✨`;
+        }
+      } else {
+        // No age provided but name exists or not
+        cheerText = `🎉 Hello ${nameForMessage}! Wishing you a brilliant day full of code, smiles, and positive vibes. You're amazing just the way you are! 🚀💛`;
+      }
+      
+      // Extra touch: if both name and age are missing, show even more generic but inclusive
+      if ((!currentUserName || currentUserName.trim() === "") && ageForMessage === null) {
+        cheerText = `🌟 Welcome, wonderful person! ✨ Feel free to enter your name & age to make this greeting truly yours. Until then, have an inspiring day! 🎈💻`;
+      }
+      
+      alert(cheerText);
+      
+      // Also animate button feedback (like original)
+      const originalText = cheerBtn.textContent;
+      cheerBtn.textContent = "🎈 Cheers delivered! 🎈";
+      setTimeout(() => {
+        cheerBtn.textContent = originalText;
+      }, 1300);
+    }
+    
+    // ---- Event listeners ----
+    if (saveBtn) {
+      saveBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        setUserProfile();
+      });
+    }
+    
+    if (cheerBtn) {
+      cheerBtn.addEventListener('click', function() {
+        showPersonalizedCheers();
+      });
+    }
+    
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function(e) {
+        resetToDefault();
+      });
+    }
+    
+    // Allow pressing Enter key inside input fields to trigger Set Profile
+    const nameInputElem = userNameInput;
+    const ageInputElem = userAgeInput;
+    function onEnterHandler(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        setUserProfile();
+      }
+    }
+    if (nameInputElem) nameInputElem.addEventListener('keypress', onEnterHandler);
+    if (ageInputElem) ageInputElem.addEventListener('keypress', onEnterHandler);
+    
+    // initial refresh to show default state (identical to no user data)
+    refreshDisplay();
+    
+    // extra minor: set placeholder hints for fun
+    if (userNameInput) userNameInput.placeholder = "Enter your name...";
+    if (userAgeInput) userAgeInput.placeholder = "Your age (1-120)";
+  })();
+</script>
+</body>
+</html>
